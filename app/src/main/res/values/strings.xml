@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CleanShield</string>
+    <string name="app_description">Protección contra contenido adictivo</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_stats">Estadísticas</string>
+    <string name="nav_recovery">Recuperación</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_vpn">Protección VPN</string>
+    <string name="notification_channel_blocker">Bloqueador de Apps</string>
+    <string name="notification_channel_streak">Racha de Días</string>
+    <string name="notification_channel_motivation">Motivación</string>
+    <string name="notification_vpn_active">VPN activo - Tu navegación está protegida</string>
+    <string name="notification_blocker_active">Bloqueador activo - Monitoreando aplicaciones</string>
+    <string name="notification_streak_milestone">¡Felicidades! Llevas %d días limpio</string>
+
+    <!-- Blocked Messages -->
+    <string name="blocked_title">Contenido Bloqueado</string>
+    <string name="blocked_message">Este contenido ha sido bloqueado por tu protección</string>
+    <string name="blocked_app_detected">App bloqueada detectada</string>
+    <string name="blocked_encouragement">Recuerda por qué empezaste este camino</string>
+    <string name="blocked_breathe">Respira profundo. Tú eres más fuerte que esto.</string>
+    <string name="blocked_redirect">Estás siendo redirigido a un lugar seguro</string>
+    <string name="blocked_domain_message">Este sitio web ha sido bloqueado para tu protección</string>
+
+    <!-- Setup -->
+    <string name="setup_vpn_title">Activar VPN de Protección</string>
+    <string name="setup_vpn_desc">Filtra contenido dañino a nivel de DNS</string>
+    <string name="setup_accessibility_title">Activar Accesibilidad</string>
+    <string name="setup_accessibility_desc">Detecta y bloquea apps peligrosas</string>
+    <string name="setup_admin_title">Activar Administrador</string>
+    <string name="setup_admin_desc">Protección contra desinstalación</string>
+
+    <!-- Settings -->
+    <string name="settings_password">Contraseña de Protección</string>
+    <string name="settings_password_hint">Ingresa contraseña para desactivar protección</string>
+    <string name="settings_vpn_toggle">Filtrado VPN DNS</string>
+    <string name="settings_app_blocker">Bloqueador de Apps</string>
+    <string name="settings_night_mode">Modo Nocturno Estricto</string>
+    <string name="settings_emergency">Contacto de Emergencia</string>
+
+    <!-- Stats -->
+    <string name="stats_clean_days">Días Limpio</string>
+    <string name="stats_blocked_attempts">Intentos Bloqueados</string>
+    <string name="stats_streak_record">Récord de Racha</string>
+    <string name="stats_weekly_progress">Progreso Semanal</string>
+
+    <!-- Recovery -->
+    <string name="recovery_journal_title">Diario de Recuperación</string>
+    <string name="recovery_meditation">Meditación Guiada</string>
+    <string name="recovery_emergency_button">Botón de Emergencia</string>
+    <string name="recovery_community">Comunidad de Apoyo</string>
+
+    <!-- Device Admin -->
+    <string name="admin_description">CleanShield necesita permisos de administrador para evitar su desinstalación accidental durante momentos de debilidad.</string>
+    <string name="admin_disable_warning">Si desactivas el administrador, la protección contra desinstalación se perderá.</string>
+</resources>

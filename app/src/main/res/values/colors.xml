@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary - Green (Protection/Safety) -->
+    <color name="primary">#1B5E20</color>
+    <color name="primary_light">#4C8C4A</color>
+    <color name="primary_dark">#003300</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <!-- Secondary - Teal -->
+    <color name="secondary">#00695C</color>
+    <color name="secondary_light">#439889</color>
+    <color name="secondary_dark">#003D33</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <!-- Tertiary - Blue -->
+    <color name="tertiary">#1565C0</color>
+    <color name="on_tertiary">#FFFFFF</color>
+
+    <!-- Error/Blocked - Red -->
+    <color name="blocked_red">#B71C1C</color>
+    <color name="blocked_red_light">#F05545</color>
+    <color name="blocked_red_dark">#7F0000</color>
+    <color name="on_blocked">#FFFFFF</color>
+
+    <!-- Streak/Achievement - Gold -->
+    <color name="streak_gold">#F9A825</color>
+    <color name="streak_gold_light">#FFD95A</color>
+    <color name="streak_gold_dark">#C17900</color>
+
+    <!-- Background -->
+    <color name="background_light">#FAFAFA</color>
+    <color name="background_dark">#121212</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1E1E</color>
+
+    <!-- Status Colors -->
+    <color name="status_protected">#2E7D32</color>
+    <color name="status_warning">#FF8F00</color>
+    <color name="status_danger">#C62828</color>
+    <color name="status_inactive">#757575</color>
+
+    <!-- Night Mode -->
+    <color name="night_overlay">#CC000000</color>
+    <color name="night_amber">#FF8F00</color>
+</resources>
