@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanShield - Recupera el control de tu vida digital</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        /* Hero */
+        .hero { background: linear-gradient(135deg, #0f9b0f 0%, #1a73e8 100%); color: white; padding: 100px 20px; text-align: center; }
+        .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 20px; }
+        .hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto 40px; opacity: 0.9; }
+        .btn-primary { display: inline-block; background: #fff; color: #0f9b0f; padding: 16px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 700; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .btn-green { background: #0f9b0f; color: #fff; }
+        .btn-green:hover { background: #0d8a0d; }
+
+        /* Features */
+        .features { padding: 80px 20px; background: #f8fafb; }
+        .features h2 { text-align: center; font-size: 2.2rem; margin-bottom: 50px; color: #1a1a2e; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .feature-card { background: white; padding: 35px 25px; border-radius: 16px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.2s; }
+        .feature-card:hover { transform: translateY(-5px); }
+        .feature-card .icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: #0f9b0f; }
+        .feature-card p { color: #555; font-size: 0.95rem; }
+        /* Pricing */
+        .pricing { padding: 80px 20px; }
+        .pricing h2 { text-align: center; font-size: 2.2rem; margin-bottom: 50px; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .price-card { border: 2px solid #e0e0e0; border-radius: 16px; padding: 40px 30px; text-align: center; position: relative; }
+        .price-card.popular { border-color: #0f9b0f; transform: scale(1.05); }
+        .price-card.popular::before { content: 'MÁS POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f9b0f; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .price-card h3 { font-size: 1.4rem; margin-bottom: 10px; }
+        .price-card .price { font-size: 2.5rem; font-weight: 800; color: #0f9b0f; margin-bottom: 5px; }
+        .price-card .period { color: #888; margin-bottom: 25px; }
+        .price-card ul { list-style: none; text-align: left; margin-bottom: 30px; }
+        .price-card ul li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+        .price-card ul li::before { content: '✓ '; color: #0f9b0f; font-weight: bold; }
+
+        /* Testimonials */
+        .testimonials { padding: 80px 20px; background: #f8fafb; }
+        .testimonials h2 { text-align: center; font-size: 2.2rem; margin-bottom: 50px; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .testimonial-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .testimonial-card .stars { color: #f5a623; margin-bottom: 15px; font-size: 1.2rem; }
+        .testimonial-card p { font-style: italic; color: #444; margin-bottom: 15px; }
+        .testimonial-card .author { font-weight: 700; color: #1a1a2e; }
+        /* Comparison */
+        .comparison { padding: 80px 20px; }
+        .comparison h2 { text-align: center; font-size: 2.2rem; margin-bottom: 50px; }
+        .comparison table { width: 100%; max-width: 900px; margin: 0 auto; border-collapse: collapse; }
+        .comparison th, .comparison td { padding: 14px 20px; text-align: center; border-bottom: 1px solid #eee; }
+        .comparison th { background: #f8fafb; font-weight: 700; }
+        .comparison td:first-child, .comparison th:first-child { text-align: left; }
+        .comparison .check { color: #0f9b0f; font-weight: bold; }
+        .comparison .cross { color: #ccc; }
+        /* Final CTA */
+        .final-cta { background: linear-gradient(135deg, #1a73e8 0%, #0f9b0f 100%); color: white; padding: 80px 20px; text-align: center; }
+        .final-cta h2 { font-size: 2.4rem; margin-bottom: 20px; }
+        .final-cta p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        /* Footer */
+        footer { background: #1a1a2e; color: #aaa; padding: 40px 20px; text-align: center; }
+        footer a { color: #0f9b0f; text-decoration: none; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .features-grid, .pricing-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .price-card.popular { transform: scale(1); }
+            .comparison table { font-size: 0.8rem; }
+            .comparison th, .comparison td { padding: 10px 8px; }
+            .final-cta h2 { font-size: 1.8rem; }
+        }
+        @media (max-width: 480px) {
+            .hero { padding: 60px 15px; }
+            .hero h1 { font-size: 1.7rem; }
+            .btn-primary { padding: 14px 30px; font-size: 1rem; }
+            .features, .pricing, .testimonials, .comparison, .final-cta { padding: 50px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Recupera el control de tu vida digital</h1>
+            <p>CleanShield combina bloqueo inteligente de contenido con herramientas de recuperación basadas en neurociencia. La única app que no solo bloquea, sino que te ayuda a sanar.</p>
+            <a href="https://play.google.com/store" class="btn-primary">Descargar Gratis en Google Play</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Todo lo que necesitas para tu bienestar digital</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon">🛡️</div>
+                    <h3>Bloqueo Inteligente</h3>
+                    <p>Filtrado DNS a nivel de sistema operativo. Bloquea contenido explícito en navegadores, apps y redes sociales sin afectar el rendimiento.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🆘</div>
+                    <h3>Botón de Pánico</h3>
+                    <p>Cuando sientas una urgencia, activa el botón de pánico para recibir ejercicios de respiración, llamada a tu compañero y redirección inmediata.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🧠</div>
+                    <h3>Neurociencia Aplicada</h3>
+                    <p>Comprende los mecanismos de la adicción con lecciones interactivas. Reprograma tu cerebro con técnicas basadas en evidencia científica.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚔️</div>
+                    <h3>Sistema RPG</h3>
+                    <p>Convierte tu recuperación en un juego. Gana XP, sube de nivel, desbloquea logros y compite en rankings. La gamificación que necesitas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🧘</div>
+                    <h3>Meditación Guiada</h3>
+                    <p>Sesiones de mindfulness diseñadas específicamente para momentos de tentación. Reduce la ansiedad y fortalece tu autocontrol.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>Detección de Patrones</h3>
+                    <p>IA que analiza tus momentos vulnerables y te alerta antes de que ocurra una recaída. Prevención inteligente personalizada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Planes para cada etapa de tu recuperación</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Gratis</h3>
+                    <div class="price">0€</div>
+                    <div class="period">para siempre</div>
+                    <ul>
+                        <li>Bloqueo de 2 categorías</li>
+                        <li>Botón de pánico básico</li>
+                        <li>Contador de racha</li>
+                        <li>1 sesión de meditación</li>
+                        <li>Lecciones introductorias</li>
+                    </ul>
+                    <a href="https://play.google.com/store" class="btn-primary btn-green">Empezar Gratis</a>
+                </div>
+                <div class="price-card popular">
+                    <h3>Pro</h3>
+                    <div class="price">4,99€</div>
+                    <div class="period">al mes</div>
+                    <ul>
+                        <li>Bloqueo ilimitado de categorías</li>
+                        <li>Botón de pánico avanzado</li>
+                        <li>Sistema RPG completo</li>
+                        <li>Meditaciones ilimitadas</li>
+                        <li>Detección de patrones con IA</li>
+                        <li>Panel de tutor</li>
+                        <li>Modo nocturno inteligente</li>
+                        <li>Soporte prioritario</li>
+                    </ul>
+                    <a href="https://play.google.com/store" class="btn-primary btn-green">7 días gratis</a>
+                </div>
+                <div class="price-card">
+                    <h3>Familia</h3>
+                    <div class="price">9,99€</div>
+                    <div class="period">al mes</div>
+                    <ul>
+                        <li>Todo lo de Pro</li>
+                        <li>Hasta 5 dispositivos</li>
+                        <li>Control parental avanzado</li>
+                        <li>Panel de tutor multi-dispositivo</li>
+                        <li>Alertas en tiempo real</li>
+                        <li>Perfiles personalizados</li>
+                        <li>Soporte familiar 24/7</li>
+                    </ul>
+                    <a href="https://play.google.com/store" class="btn-primary btn-green">Probar 7 días</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Lo que dicen nuestros usuarios</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Llevaba 3 años intentando dejarlo sin éxito. CleanShield fue la primera app que realmente me ayudó porque no solo bloquea, te da herramientas reales para entender por qué recaes."</p>
+                    <div class="author">— Carlos M., 28 años</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"El sistema RPG es genial. Suena tonto pero ver mi personaje subir de nivel me motiva más que cualquier otra cosa. Llevo 90 días de racha y no pienso parar."</p>
+                    <div class="author">— Alejandro R., 22 años</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Como padre, el panel de tutor me da tranquilidad. Puedo ver que mis hijos están protegidos sin invadir su privacidad. El equilibrio perfecto."</p>
+                    <div class="author">— María L., 45 años</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="container">
+            <h2>¿Por qué CleanShield?</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>CleanShield</th>
+                        <th>BlockerX</th>
+                        <th>Covenant Eyes</th>
+                        <th>Qustodio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bloqueo DNS a nivel sistema</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Herramientas de recuperación</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Sistema de gamificación RPG</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Meditación guiada</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Detección de patrones IA</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>Panel de tutor en tiempo real</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Botón de pánico</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                    </tr>
+                    <tr>
+                        <td>En español nativo</td>
+                        <td class="check">✓</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Precio desde</td>
+                        <td><strong>Gratis</strong></td>
+                        <td>7,99€/mes</td>
+                        <td>15,99$/mes</td>
+                        <td>4,58€/mes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Tu futuro libre empieza hoy</h2>
+            <p>Más de 10.000 personas ya han dado el primer paso. Únete a la comunidad y recupera el control de tu vida.</p>
+            <a href="https://play.google.com/store" class="btn-primary">Descargar CleanShield Gratis</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2024 CleanShield. Todos los derechos reservados.</p>
+            <p style="margin-top: 10px;">
+                <a href="/legal/privacy">Política de Privacidad</a> · 
+                <a href="/legal/terms">Términos de Servicio</a> · 
+                <a href="mailto:soporte@cleanshield.app">soporte@cleanshield.app</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
