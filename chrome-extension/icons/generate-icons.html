@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<p>Open this file in a browser and right-click each canvas to save as PNG</p>
+<canvas id="c16" width="16" height="16"></canvas>
+<canvas id="c48" width="48" height="48"></canvas>
+<canvas id="c128" width="128" height="128"></canvas>
+<script>
+function drawIcon(canvas) {
+  const ctx = canvas.getContext('2d');
+  const s = canvas.width;
+  
+  // Background circle
+  ctx.beginPath();
+  ctx.arc(s/2, s/2, s/2 - 1, 0, Math.PI * 2);
+  ctx.fillStyle = '#00b894';
+  ctx.fill();
+  
+  // Shield shape
+  ctx.beginPath();
+  const cx = s/2, cy = s/2;
+  const w = s * 0.4, h = s * 0.5;
+  ctx.moveTo(cx, cy - h/2);
+  ctx.lineTo(cx + w/2, cy - h/3);
+  ctx.lineTo(cx + w/2, cy + h/6);
+  ctx.quadraticCurveTo(cx, cy + h/2, cx, cy + h/2);
+  ctx.quadraticCurveTo(cx, cy + h/2, cx - w/2, cy + h/6);
+  ctx.lineTo(cx - w/2, cy - h/3);
+  ctx.closePath();
+  ctx.fillStyle = 'white';
+  ctx.fill();
+}
+
+drawIcon(document.getElementById('c16'));
+drawIcon(document.getElementById('c48'));
+drawIcon(document.getElementById('c128'));
+</script>
+</body>
+</html>

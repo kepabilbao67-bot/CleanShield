@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanShield - Panel de Recuperacion</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">🛡️</div>
+        <h1>CleanShield</h1>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="home">🏠 Inicio</button>
+        <button class="nav-btn" data-tab="journal">📔 Diario</button>
+        <button class="nav-btn" data-tab="meditation">🧘 Meditacion</button>
+        <button class="nav-btn" data-tab="settings">⚙️ Ajustes</button>
+      </nav>
+    </header>
+
+    <main class="content">
+      <!-- HOME TAB -->
+      <section id="tab-home" class="tab active">
+        <div class="stats-grid">
+          <div class="stat-card streak">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value" id="streakDays">0</div>
+            <div class="stat-label">Dias Limpios</div>
+          </div>
+          <div class="stat-card blocked">
+            <div class="stat-icon">🚫</div>
+            <div class="stat-value" id="totalBlocked">0</div>
+            <div class="stat-label">Total Bloqueados</div>
+          </div>
+          <div class="stat-card today">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value" id="blockedToday">0</div>
+            <div class="stat-label">Bloqueados Hoy</div>
+          </div>
+          <div class="stat-card protection">
+            <div class="stat-icon">🛡️</div>
+            <div class="stat-value" id="protectionStatus">Activa</div>
+            <div class="stat-label">Proteccion</div>
+          </div>
+        </div>
+
+        <div class="quote-section">
+          <h3>💬 Mensaje del Dia</h3>
+          <p id="dailyQuote" class="daily-quote"></p>
+        </div>
+
+        <div class="panic-section">
+          <h3>🆘 Boton de Emergencia</h3>
+          <p>Si sientes una urgencia fuerte, contacta a tu persona de confianza:</p>
+          <div class="panic-contact">
+            <input type="text" id="panicContact" placeholder="Numero o nombre del contacto">
+            <button id="savePanicBtn" class="btn-small">Guardar</button>
+          </div>
+          <button id="panicBtn" class="btn-panic">LLAMAR AHORA</button>
+        </div>
+      </section>
+
+
+      <!-- JOURNAL TAB -->
+      <section id="tab-journal" class="tab">
+        <h2>📔 Diario de Recuperacion</h2>
+        <div class="journal-form">
+          <div class="mood-selector">
+            <p>¿Como te sientes hoy?</p>
+            <div class="mood-options">
+              <button class="mood-btn" data-mood="great">😊 Genial</button>
+              <button class="mood-btn" data-mood="good">🙂 Bien</button>
+              <button class="mood-btn" data-mood="neutral">😐 Normal</button>
+              <button class="mood-btn" data-mood="bad">😟 Mal</button>
+              <button class="mood-btn" data-mood="terrible">😢 Terrible</button>
+            </div>
+          </div>
+          <textarea id="journalText" placeholder="Escribe lo que sientes, tus logros del dia, o lo que necesites expresar..." rows="6"></textarea>
+          <button id="saveJournalBtn" class="btn-primary">Guardar Entrada</button>
+        </div>
+        <div class="journal-entries" id="journalEntries">
+          <h3>Entradas Anteriores</h3>
+          <div id="entriesList"></div>
+        </div>
+      </section>
+
+      <!-- MEDITATION TAB -->
+      <section id="tab-meditation" class="tab">
+        <h2>🧘 Meditacion y Respiracion</h2>
+        <div class="meditation-options">
+          <div class="meditation-card" data-duration="60">
+            <div class="med-icon">🌬️</div>
+            <h3>Respiracion Rapida</h3>
+            <p>1 minuto - Tecnica 4-4-4</p>
+          </div>
+          <div class="meditation-card" data-duration="180">
+            <div class="med-icon">🧘</div>
+            <h3>Calma Interior</h3>
+            <p>3 minutos - Respiracion guiada</p>
+          </div>
+          <div class="meditation-card" data-duration="300">
+            <div class="med-icon">🌊</div>
+            <h3>Meditacion Profunda</h3>
+            <p>5 minutos - Atencion plena</p>
+          </div>
+        </div>
+        <div class="meditation-player" id="meditationPlayer" style="display:none;">
+          <div class="breath-circle" id="breathCircle"></div>
+          <p class="breath-instruction" id="breathInstruction">Preparate...</p>
+          <p class="breath-timer" id="breathTimer">0:00</p>
+          <button id="stopMeditation" class="btn-secondary">Detener</button>
+        </div>
+      </section>
+
+
+      <!-- SETTINGS TAB -->
+      <section id="tab-settings" class="tab">
+        <h2>⚙️ Ajustes</h2>
+        
+        <div class="settings-group">
+          <h3>🔒 Proteccion con Contrasena</h3>
+          <p>Establece una contrasena para evitar desactivar la proteccion.</p>
+          <div class="password-form">
+            <input type="password" id="newPassword" placeholder="Nueva contrasena">
+            <input type="password" id="confirmPassword" placeholder="Confirmar contrasena">
+            <button id="setPasswordBtn" class="btn-primary">Establecer Contrasena</button>
+          </div>
+          <p id="passwordStatus" class="status-text"></p>
+        </div>
+
+        <div class="settings-group">
+          <h3>🛡️ Control de Proteccion</h3>
+          <div class="toggle-row">
+            <span>Proteccion Activa</span>
+            <label class="toggle">
+              <input type="checkbox" id="protectionToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div id="disablePasswordPrompt" style="display:none;">
+            <input type="password" id="disablePassword" placeholder="Contrasena para desactivar">
+            <button id="confirmDisableBtn" class="btn-small btn-danger">Confirmar</button>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3>🔄 Reiniciar Racha</h3>
+          <p>Si has tenido una recaida, reinicia tu contador con honestidad.</p>
+          <button id="resetStreakBtn" class="btn-danger">Reiniciar Racha</button>
+        </div>
+
+        <div class="settings-group">
+          <h3>➕ Dominios Personalizados</h3>
+          <p>Anade dominios adicionales para bloquear:</p>
+          <div class="custom-domain-form">
+            <input type="text" id="customDomain" placeholder="ejemplo.com">
+            <button id="addDomainBtn" class="btn-small">Anadir</button>
+          </div>
+          <ul id="customDomainList" class="domain-list"></ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

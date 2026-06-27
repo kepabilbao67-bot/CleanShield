@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanShield - Contenido Bloqueado</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      overflow: hidden;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 3rem;
+      max-width: 600px;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .shield-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 60px rgba(0, 184, 148, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 60px rgba(0, 184, 148, 0.3); }
+      50% { box-shadow: 0 0 80px rgba(0, 184, 148, 0.5); }
+    }
+    
+    .shield-icon svg {
+      width: 60px;
+      height: 60px;
+      fill: white;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      color: #a0aec0;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quote-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+    
+    .quote-text {
+      font-size: 1.25rem;
+      font-style: italic;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+    
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 184, 148, 0.4);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #a0aec0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+    
+    .breathing-hint {
+      margin-top: 2rem;
+      color: #718096;
+      font-size: 0.9rem;
+    }
+    
+    .breathing-circle {
+      width: 20px;
+      height: 20px;
+      background: rgba(0, 184, 148, 0.5);
+      border-radius: 50%;
+      display: inline-block;
+      animation: breathe 4s ease-in-out infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.5); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shield-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v5.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z"/><path d="M10 12l-2-2-1.41 1.41L10 14.83l5.41-5.42L14 8l-4 4z"/></svg>
+    </div>
+    
+    <h1>Contenido Bloqueado</h1>
+    <p class="subtitle">CleanShield te protege. Estás tomando la decisión correcta.</p>
+    
+    <div class="streak-badge">
+      <span>🔥</span>
+      <span id="streakText">Cargando racha...</span>
+    </div>
+    
+    <div class="quote-box">
+      <p class="quote-text" id="quoteText">Cargando mensaje...</p>
+    </div>
+    
+    <div class="actions">
+      <button class="btn btn-primary" onclick="openDashboard()">
+        📊 Panel de Recuperacion
+      </button>
+      <button class="btn btn-secondary" onclick="goHome()">
+        🏠 Ir al Inicio
+      </button>
+      <button class="btn btn-secondary" onclick="startBreathing()">
+        🧘 Respirar
+      </button>
+    </div>
+    
+    <div class="breathing-hint" id="breathingHint" style="display: none;">
+      <div class="breathing-circle"></div>
+      <span>Inspira 4s... Mantén 4s... Exhala 4s...</span>
+    </div>
+  </div>
+
+  <script>
+    const QUOTES = [
+      "Cada dia que resistes te hace mas fuerte. Sigue adelante.",
+      "No mires atras, tu ya no vas en esa direccion.",
+      "La libertad empieza donde termina la adiccion.",
+      "Eres mas fuerte de lo que crees. Tu racha lo demuestra.",
+      "El progreso no es lineal, pero cada intento cuenta.",
+      "Tu futuro yo te agradecera esta decision.",
+      "La disciplina es el puente entre metas y logros.",
+      "Un paso a la vez. Un dia a la vez. Tu puedes.",
+      "No necesitas ser perfecto, solo necesitas no rendirte.",
+      "Tu valor como persona no depende de tus errores pasados.",
+      "Cada momento de tentacion superado es una victoria.",
+      "Recuerda: buscas progreso, no perfeccion.",
+      "Las cadenas del habito son demasiado ligeras para sentirse hasta que son demasiado pesadas para romperse.",
+      "Hoy es un buen dia para ser libre.",
+      "Tu cerebro se esta reconectando. Dale tiempo y paciencia."
+    ];
+
+    // Show random quote
+    const randomQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    document.getElementById('quoteText').textContent = `"${randomQuote}"`;
+
+    // Get streak
+    chrome.runtime.sendMessage({ type: 'GET_STATS' }, (response) => {
+      if (response) {
+        document.getElementById('streakText').textContent = 
+          `${response.streakDays} dia${response.streakDays !== 1 ? 's' : ''} limpio${response.streakDays !== 1 ? 's' : ''}`;
+      }
+    });
+
+    function openDashboard() {
+      window.location.href = chrome.runtime.getURL('dashboard.html');
+    }
+
+    function goHome() {
+      window.location.href = 'https://www.google.com';
+    }
+
+    function startBreathing() {
+      const hint = document.getElementById('breathingHint');
+      hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
