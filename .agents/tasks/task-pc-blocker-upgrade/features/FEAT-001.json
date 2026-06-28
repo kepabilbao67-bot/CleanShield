@@ -2,7 +2,7 @@
   "id": "FEAT-001",
   "type": "feat",
   "description": "Expand domain blocking to cover ALL addiction and harmful content categories: drugs, alcohol, self-harm, dark web, piracy, and dating/hookup sites. Create new categorized domain list files for each category with comprehensive coverage.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create pc-blocker/dominios-drogas.txt with 50+ drug marketplace and drug information domains (silk road mirrors, drug forums, cannabis shops, etc.)",
     "Create pc-blocker/dominios-alcohol.txt with 30+ alcohol delivery, promotion, and e-commerce domains (drizly, minibar, totalwine, bodeboca, uvinum, etc.)",
@@ -28,5 +28,5 @@
     "Run: cat pc-blocker/dominios-*.txt | grep -c 'www\\.' (verify www variants exist)"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 7 new domain files created successfully. Existing files expanded. Total 1126 domains across 10 files. All verification criteria passed: 10 files (>=9), 1126 entries (>600), 559 www variants present."
 }
