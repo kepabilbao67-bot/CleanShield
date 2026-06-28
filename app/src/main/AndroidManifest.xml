@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Boot & Background -->
@@ -28,6 +29,20 @@
 
     <!-- Vibration for notifications -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Voice Assistant -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Location for Danger Zones -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- SMS for Silent SOS -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <!-- Sensors for Impulse Scanner -->
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
 
     <application
         android:name=".CleanShieldApp"
@@ -95,6 +110,12 @@
             android:exported="false"
             android:foregroundServiceType="specialUse" />
 
+        <!-- Danger Zones Location Service -->
+        <service
+            android:name=".service.DangerZonesService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
         <!-- Device Admin Receiver -->
         <receiver
             android:name=".admin.CleanShieldDeviceAdmin"
@@ -121,15 +142,6 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-
-        <!-- Firebase Messaging Service -->
-        <service
-            android:name=".notifications.CleanShieldMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
         <!-- WorkManager Initializer -->
         <provider

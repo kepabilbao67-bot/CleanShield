@@ -71,8 +71,19 @@ class CleanShieldApp : Application(), Configuration.Provider {
             setShowBadge(true)
         }
 
+        // Danger Zones Channel
+        val dangerZonesChannel = NotificationChannel(
+            CHANNEL_DANGER_ZONES,
+            "Zonas de Peligro",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Alertas de proximidad a zonas de riesgo"
+            setShowBadge(true)
+            enableVibration(true)
+        }
+
         notificationManager.createNotificationChannels(
-            listOf(vpnChannel, blockerChannel, streakChannel, motivationChannel)
+            listOf(vpnChannel, blockerChannel, streakChannel, motivationChannel, dangerZonesChannel)
         )
     }
 
@@ -86,5 +97,7 @@ class CleanShieldApp : Application(), Configuration.Provider {
         const val NOTIFICATION_ID_BLOCKER = 1002
         const val NOTIFICATION_ID_STREAK = 1003
         const val NOTIFICATION_ID_MOTIVATION = 1004
+        const val CHANNEL_DANGER_ZONES = "danger_zones"
+        const val NOTIFICATION_ID_DANGER_ZONES = 1005
     }
 }
