@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanShield - Asistente IA de Recuperacion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="15" stroke="#34a853" stroke-width="2" fill="none"/>
+                        <path d="M10 16l4 4 8-8" stroke="#34a853" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>CleanShield</h1>
+                    <span class="subtitle">Asistente de Recuperacion</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="btn-clear" class="header-btn" title="Limpiar conversacion">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3,6 5,6 21,6"/><path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"/>
+                    </svg>
+                </button>
+                <button id="btn-export" class="header-btn" title="Exportar conversacion">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21,15v4a2,2,0,0,1-2,2H5a2,2,0,0,1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Emergency Banner -->
+        <div class="emergency-banner">
+            <span class="emergency-icon">&#9888;</span>
+            <span>Si estas en crisis: <strong>024</strong> (Linea de Atencion a la Conducta Suicida) | <strong>Telefono de la Esperanza: 717 003 717</strong></span>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area" id="chat-area">
+            <!-- Messages will be inserted here -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-btn" data-message="Como funciona el bloqueo de CleanShield?">&#128274; Como funciona?</button>
+            <button class="quick-btn" data-message="Necesito ayuda con mi adiccion, me siento mal">&#128156; Necesito ayuda</button>
+            <button class="quick-btn" data-message="Tengo un error con CleanShield, no funciona correctamente">&#9888; Tengo un error</button>
+            <button class="quick-btn" data-message="Guiame en un ejercicio de respiracion para calmarme">&#127793; Respiracion</button>
+            <button class="quick-btn" data-message="Dame los contactos de emergencia y ayuda profesional">&#128222; Emergencia</button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-container">
+                <textarea id="message-input" placeholder="Escribe tu mensaje aqui..." rows="1"></textarea>
+                <button id="btn-send" class="send-btn" title="Enviar mensaje">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="input-footer">
+                <span class="mode-indicator" id="mode-indicator">&#9679; Modo: Configurar API para IA completa</span>
+            </div>
+        </div>
+
+        <!-- Emergency Contacts Sidebar (mobile: bottom sheet) -->
+        <div class="emergency-panel" id="emergency-panel" style="display: none;">
+            <div class="panel-header">
+                <h3>Contactos de Emergencia</h3>
+                <button id="close-panel" class="close-btn">&times;</button>
+            </div>
+            <div class="panel-content">
+                <div class="contact-card">
+                    <h4>&#128680; Linea de Atencion a la Conducta Suicida</h4>
+                    <p class="phone">024</p>
+                    <p>24 horas, gratuito, confidencial</p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#128222; Telefono de la Esperanza</h4>
+                    <p class="phone">717 003 717</p>
+                    <p>Apoyo emocional 24h</p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#127863; Alcoholicos Anonimos Espana</h4>
+                    <p class="phone">91 341 82 82</p>
+                    <p><a href="https://www.alcoholicosanonimos.org" target="_blank">alcoholicosanonimos.org</a></p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#128138; Narcoticos Anonimos</h4>
+                    <p class="phone">902 114 147</p>
+                    <p><a href="https://www.narcoticosanonimos.es" target="_blank">narcoticosanonimos.es</a></p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#127922; Jugadores Anonimos</h4>
+                    <p class="phone">900 200 225</p>
+                    <p><a href="https://www.jugadoresanonimos.org" target="_blank">jugadoresanonimos.org</a></p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#128147; FAD - Fundacion de Ayuda contra la Drogadiccion</h4>
+                    <p class="phone">900 16 15 15</p>
+                    <p><a href="https://www.fad.es" target="_blank">fad.es</a></p>
+                </div>
+                <div class="contact-card">
+                    <h4>&#9993; Proyecto Hombre</h4>
+                    <p class="phone">902 88 55 55</p>
+                    <p><a href="https://proyectohombre.es" target="_blank">proyectohombre.es</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="offline-responses.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

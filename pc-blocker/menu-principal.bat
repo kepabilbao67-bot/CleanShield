@@ -117,12 +117,12 @@ echo.
 echo   Abriendo el Asistente IA en tu navegador...
 echo.
 :: Intentar abrir el asistente IA (HTML local)
-if exist "%~dp0..\ai-assistant\index.html" (
-    start "" "%~dp0..\ai-assistant\index.html"
+if exist "%~dp0asistente-ia\index.html" (
+    start "" "%~dp0asistente-ia\index.html"
     echo   El asistente se ha abierto en tu navegador.
 ) else (
     echo   El archivo del asistente IA no se encontro.
-    echo   Busca la carpeta "ai-assistant" en el directorio de CleanShield.
+    echo   Busca la carpeta "asistente-ia" en el directorio de CleanShield.
 )
 echo.
 pause

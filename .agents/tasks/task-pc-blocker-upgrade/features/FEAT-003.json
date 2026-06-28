@@ -1,0 +1,40 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Create an AI chatbot assistant as a local HTML/JS web application that opens from the menu. It uses a free AI API (e.g., OpenAI-compatible or Groq) to provide addiction recovery support, answer questions about the blocker, troubleshoot errors, and give motivational help. The UI is in Spanish, professional, and themed for recovery/wellness.",
+  "status": "completed",
+  "steps": [
+    "Create pc-blocker/asistente-ia/ directory for the AI assistant web app",
+    "Create pc-blocker/asistente-ia/index.html with a professional chat interface: CleanShield branding, dark/wellness theme, chat message bubbles, input field, send button, quick-action buttons for common questions (Como desbloqueo una categoria?, Necesito ayuda con mi adiccion, Como funciona el bloqueo?, Tengo un error)",
+    "Create pc-blocker/asistente-ia/styles.css with professional styling: gradient background, modern card-based chat layout, responsive design, smooth animations, CleanShield green/blue color scheme, mobile-friendly",
+    "Create pc-blocker/asistente-ia/app.js with: (1) Chat state management, (2) Message rendering with markdown support, (3) Integration with a free AI API (provide slots for OpenAI, Groq, or local Ollama endpoints), (4) System prompt that instructs the AI to be a recovery counselor and CleanShield technical support, (5) Predefined responses for common troubleshooting when API is unavailable (offline mode), (6) Chat history persistence in localStorage, (7) Export chat functionality",
+    "Create pc-blocker/asistente-ia/config.js with API configuration: endpoint URL, API key placeholder, model selection, and instructions for the user to set up their own key (with links to free tier providers)",
+    "Create pc-blocker/asistente-ia/offline-responses.js with a comprehensive FAQ database in Spanish covering: how to install/uninstall, how to fix common errors, addiction recovery tips, breathing exercises, emergency contacts (024 Spain suicide hotline, AA contacts, NA contacts, Jugadores Anonimos), motivational messages",
+    "Create pc-blocker/abrir-asistente.bat that opens the AI assistant HTML in the default browser",
+    "Update pc-blocker/menu-principal.bat to include the AI assistant option that calls abrir-asistente.bat",
+    "Create pc-blocker/asistente-ia/README.md with setup instructions for the AI API key (in Spanish)"
+  ],
+  "acceptance_criteria": [
+    "pc-blocker/asistente-ia/index.html exists with a complete chat interface",
+    "pc-blocker/asistente-ia/styles.css provides professional styling",
+    "pc-blocker/asistente-ia/app.js handles chat logic with API integration and offline fallback",
+    "pc-blocker/asistente-ia/config.js has configurable API settings",
+    "pc-blocker/asistente-ia/offline-responses.js has at least 20 predefined Q&A pairs in Spanish",
+    "The system prompt instructs the AI to act as addiction recovery counselor + tech support",
+    "Emergency contacts (024, AA, NA) are visible in the interface",
+    "Chat history is saved to localStorage",
+    "abrir-asistente.bat exists and opens the assistant",
+    "All UI text is in Spanish"
+  ],
+  "verification": [
+    "Run: test -d pc-blocker/asistente-ia && echo OK",
+    "Run: test -f pc-blocker/asistente-ia/index.html && echo OK",
+    "Run: test -f pc-blocker/asistente-ia/app.js && echo OK",
+    "Run: test -f pc-blocker/asistente-ia/offline-responses.js && echo OK",
+    "Run: grep -c 'adiccion\\|recuperacion\\|ayuda' pc-blocker/asistente-ia/offline-responses.js (should have many Spanish recovery terms)",
+    "Run: grep -c '024\\|Alcoholicos Anonimos' pc-blocker/asistente-ia/index.html (emergency contacts present)",
+    "Run: test -f pc-blocker/abrir-asistente.bat && echo OK"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

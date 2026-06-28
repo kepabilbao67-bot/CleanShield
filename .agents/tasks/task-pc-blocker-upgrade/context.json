@@ -1,0 +1,23 @@
+{
+  "project_type": "Windows system-level content blocker using batch scripts and hosts file manipulation",
+  "language": "Batch/PowerShell (Windows), HTML/JS for AI chat companion",
+  "build_system": "No build system - batch scripts run directly on Windows",
+  "test_framework": "Manual testing - batch scripts must be syntax-validated",
+  "build_command": "N/A - static scripts. Validate batch syntax with basic checks.",
+  "test_command": "Validate file structure exists and domain lists are non-empty",
+  "verification_instructions": "1. Check all .bat files have proper syntax (no unclosed quotes, proper labels). 2. Check all domain list .txt files are formatted correctly (one domain per line). 3. Check HTML/JS files for the AI chatbot have no syntax errors. 4. Verify all new domain categories are covered.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - these are standalone scripts for Windows users",
+  "environment_constraints": "Scripts are for Windows but we develop/validate them on Linux. Cannot execute .bat files here. Use syntax validation and structural checks.",
+  "contribution_requirements": "All UI text must be in Spanish. Product must be professional quality suitable for sale.",
+  "key_patterns": "Domain lists are plain text with one domain per line (with www. variants). Batch scripts use @echo off, net session for admin check, hosts file at %SystemRoot%\\System32\\drivers\\etc\\hosts with 0.0.0.0 prefix. Registry policies applied for Chrome/Brave/Edge/Firefox/Opera.",
+  "relevant_files": [
+    "pc-blocker/instalar-bloqueo.bat",
+    "pc-blocker/desinstalar-bloqueo.bat",
+    "pc-blocker/bloquear-desinstalacion.bat",
+    "pc-blocker/dominios-bloqueados.txt",
+    "pc-blocker/dominios-prostitucion.txt",
+    "pc-blocker/dominios-apuestas-prestamos.txt"
+  ],
+  "directory_structure": "pc-blocker/ - Contains batch scripts for system-level blocking and plain text domain lists. Currently has: instalar-bloqueo.bat (main installer), desinstalar-bloqueo.bat (uninstaller), bloquear-desinstalacion.bat (anti-uninstall), and 3 domain list files (pornography, prostitution, gambling/loans)."
+}

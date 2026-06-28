@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Completely rewrite and modernize the batch scripts to be professional quality: proper error handling, logging, colored output, support all new domain categories, menu-driven interface with PowerShell companion, and comprehensive browser policy enforcement.",
+  "status": "completed",
+  "steps": [
+    "Rewrite pc-blocker/instalar-bloqueo.bat as a professional installer: add colored ASCII banner, progress indicators, error handling for each step, a log file (CleanShield-log.txt), load ALL domain category files dynamically (loop through all dominios-*.txt files), add DNS-over-HTTPS blocking for Chrome/Edge/Brave/Firefox, block VPN extensions, add scheduled task to re-apply blocks daily",
+    "Rewrite pc-blocker/desinstalar-bloqueo.bat with multiple confirmation steps (type password + confirmation word), logging of who uninstalled and when, option to partially unblock specific categories only",
+    "Rewrite pc-blocker/bloquear-desinstalacion.bat to also block Task Manager access to kill the scheduled re-apply task, block PowerShell/CMD access for non-admins, block Safe Mode DNS bypass, and add tamper detection",
+    "Create pc-blocker/menu-principal.bat as a new main entry point with a numbered menu: 1) Instalar proteccion completa, 2) Configurar categorias, 3) Ver estado del bloqueo, 4) Abrir asistente IA, 5) Desinstalar (con contrasena), 6) Salir",
+    "Create pc-blocker/verificar-estado.bat that checks if hosts file has CleanShield entries, if DNS cache is clean, if browser policies are active, and reports status with colored output",
+    "Create pc-blocker/configurar-categorias.bat that lets user enable/disable specific categories (pornografia, prostitucion, drogas, alcohol, apuestas, autolesion, darkweb, pirateria, dating, violencia) with checkboxes",
+    "Add proper error codes and exit handling to all scripts - every command should check %errorlevel% and log failures",
+    "Create pc-blocker/CleanShield-log.txt template and ensure all scripts append timestamped entries"
+  ],
+  "acceptance_criteria": [
+    "menu-principal.bat exists and provides a numbered menu interface",
+    "instalar-bloqueo.bat loads all dominios-*.txt files dynamically",
+    "All scripts have proper error handling (check errorlevel after critical operations)",
+    "All scripts write to a log file with timestamps",
+    "verificar-estado.bat exists and checks protection status",
+    "configurar-categorias.bat exists for selective blocking",
+    "DNS-over-HTTPS is blocked via browser policies",
+    "A scheduled task is created for daily re-application of blocks"
+  ],
+  "verification": [
+    "Run: grep -l 'errorlevel' pc-blocker/*.bat | wc -l (all bat files should check errors)",
+    "Run: grep -l 'CleanShield-log' pc-blocker/*.bat | wc -l (all bat files should log)",
+    "Run: test -f pc-blocker/menu-principal.bat && echo OK",
+    "Run: test -f pc-blocker/verificar-estado.bat && echo OK",
+    "Run: test -f pc-blocker/configurar-categorias.bat && echo OK",
+    "Run: grep -c 'dominios-' pc-blocker/instalar-bloqueo.bat (should reference multiple domain files dynamically)"
+  ],
+  "blocked_reason": null,
+  "findings": "All 6 batch scripts created/rewritten. Dynamic domain loading uses for %%F in (dominios-*.txt) pattern. Delayed expansion enabled in scripts that use ! syntax. All scripts have errorlevel checks, timestamp logging, admin verification, and colored output. DNS-over-HTTPS blocked via DnsOverHttpsMode=off for Chromium browsers and DNSOverHTTPS/Enabled=0 for Firefox. Scheduled tasks created for daily re-application and hosts file monitoring."
+}
