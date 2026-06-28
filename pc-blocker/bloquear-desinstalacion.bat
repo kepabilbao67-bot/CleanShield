@@ -46,9 +46,24 @@ echo Aplicando politica en Edge...
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 1 /t REG_SZ /d "edge://extensions" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v 2 /t REG_SZ /d "edge://extensions/*" /f >nul 2>&1
 
+:: Firefox - block about:addons
+echo Aplicando politica en Firefox...
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\URLBlocklist" /v 1 /t REG_SZ /d "about:addons" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\URLBlocklist" /v 2 /t REG_SZ /d "about:config" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v BlockAboutAddons /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v BlockAboutConfig /t REG_DWORD /d 1 /f >nul 2>&1
+
+:: Opera
+echo Aplicando politica en Opera...
+reg add "HKLM\SOFTWARE\Policies\Opera\URLBlocklist" /v 1 /t REG_SZ /d "opera://extensions" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Opera\URLBlocklist" /v 2 /t REG_SZ /d "opera://extensions/*" /f >nul 2>&1
+
 :: Block developer mode
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v DeveloperToolsAvailability /t REG_DWORD /d 2 /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v DeveloperToolsAvailability /t REG_DWORD /d 2 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v DeveloperToolsAvailability /t REG_DWORD /d 2 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v DisableDeveloperTools /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Opera" /v DeveloperToolsAvailability /t REG_DWORD /d 2 /f >nul 2>&1
 
 echo.
 echo ============================================

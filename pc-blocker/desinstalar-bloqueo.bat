@@ -30,8 +30,15 @@ if exist "%SystemRoot%\System32\drivers\etc\hosts.bak" (
 reg delete "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\URLBlocklist" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox\URLBlocklist" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Opera\URLBlocklist" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\Google\Chrome" /v DeveloperToolsAvailability /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v DeveloperToolsAvailability /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v DeveloperToolsAvailability /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v DisableDeveloperTools /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v BlockAboutAddons /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox" /v BlockAboutConfig /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Opera" /v DeveloperToolsAvailability /f >nul 2>&1
 
 ipconfig /flushdns >nul 2>&1
 
