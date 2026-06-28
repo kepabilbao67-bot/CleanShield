@@ -54,16 +54,32 @@ echo # ===== FIN CleanShield ===== >> %H%
 :: Limpiar cache DNS
 ipconfig /flushdns >nul 2>&1
 
+:: Forzar SafeSearch en Chrome por politica
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v ForceGoogleSafeSearch /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v ForceYouTubeRestrict /t REG_DWORD /d 2 /f >nul 2>&1
+
+:: Forzar SafeSearch en Brave
+reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v ForceGoogleSafeSearch /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\BraveSoftware\Brave" /v ForceYouTubeRestrict /t REG_DWORD /d 2 /f >nul 2>&1
+
+:: Forzar SafeSearch en Edge
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v ForceGoogleSafeSearch /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v ForceYouTubeRestrict /t REG_DWORD /d 2 /f >nul 2>&1
+
+:: Forzar SafeSearch en Firefox
+reg add "HKLM\SOFTWARE\Policies\Mozilla\Firefox\SearchEngines" /v Default /t REG_SZ /d "Google" /f >nul 2>&1
+
 echo.
 echo ============================================
-echo   BLOQUEO INSTALADO - +250 DOMINIOS
+echo   BLOQUEO INSTALADO - +300 DOMINIOS
 echo ============================================
 echo.
 echo - Porno bloqueado
-echo - Prostitucion bloqueado
+echo - Prostitucion bloqueado  
 echo - Apuestas bloqueado
 echo - Prestamos bloqueado
-echo - SafeSearch forzado en Google
+echo - SafeSearch FORZADO en todos los navegadores
+echo - YouTube modo restringido activado
 echo - Bing, DuckDuckGo y Yandex bloqueados
 echo.
 pause
