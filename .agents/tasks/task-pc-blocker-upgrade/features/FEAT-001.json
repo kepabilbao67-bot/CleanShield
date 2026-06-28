@@ -1,0 +1,32 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Expand domain blocking to cover ALL addiction and harmful content categories: drugs, alcohol, self-harm, dark web, piracy, and dating/hookup sites. Create new categorized domain list files for each category with comprehensive coverage.",
+  "status": "in_progress",
+  "steps": [
+    "Create pc-blocker/dominios-drogas.txt with 50+ drug marketplace and drug information domains (silk road mirrors, drug forums, cannabis shops, etc.)",
+    "Create pc-blocker/dominios-alcohol.txt with 30+ alcohol delivery, promotion, and e-commerce domains (drizly, minibar, totalwine, bodeboca, uvinum, etc.)",
+    "Create pc-blocker/dominios-autolesion.txt with 40+ self-harm, pro-anorexia, and suicide-related domains and forums",
+    "Create pc-blocker/dominios-darkweb.txt with 30+ dark web access tools, Tor browser download pages, VPN bypass sites, and anonymizer domains",
+    "Create pc-blocker/dominios-pirateria.txt with 40+ torrent sites, piracy streaming, and illegal download domains (thepiratebay, 1337x, rarbg, etc.)",
+    "Create pc-blocker/dominios-dating.txt with 30+ hookup/dating apps web versions (tinder, grindr, ashley madison, seeking, etc.)",
+    "Create pc-blocker/dominios-violencia.txt with 30+ gore, extreme violence, and harmful content domains",
+    "Expand the existing dominios-apuestas-prestamos.txt to include 30+ more international gambling sites (stake.com, casumo, leovegas, etc.)",
+    "Expand the existing dominios-bloqueados.txt to include 30+ more pornography sites that were missing",
+    "All domain files must include both bare domain and www. prefix variants"
+  ],
+  "acceptance_criteria": [
+    "At least 7 new domain list files exist covering drugs, alcohol, self-harm, dark web, piracy, dating, and violence",
+    "Each domain list has at least 30 entries minimum",
+    "All domains are formatted as one per line with www. variant included",
+    "Existing domain lists are expanded with additional entries",
+    "Total combined domain count across all files exceeds 600"
+  ],
+  "verification": [
+    "Run: find pc-blocker/ -name 'dominios-*.txt' | wc -l (should be >= 9)",
+    "Run: cat pc-blocker/dominios-*.txt | grep -v '^$' | grep -v '^#' | wc -l (should be > 600)",
+    "Run: cat pc-blocker/dominios-*.txt | grep -c 'www\\.' (verify www variants exist)"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
