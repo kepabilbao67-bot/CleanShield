@@ -161,4 +161,5 @@ object CleanShieldColors {
     val AccentPurple = Color(0xFF9B59B6)
     val AccentOrange = Color(0xFFF39C12)
     val AccentRed = Color(0xFFE74C3C)
+    val BlockedRedDark = Color(0xFF7F0000)
 }
