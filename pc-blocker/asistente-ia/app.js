@@ -77,7 +77,21 @@ class ChatApp {
     }
 
     checkApiConfig() {
+        // Check localStorage first (more secure), then fall back to config.js
+        const storedKey = localStorage.getItem('cleanshield_api_key');
+        if (storedKey && storedKey.trim().length > 0) {
+            return true;
+        }
         return !!(CLEANSHIELD_AI_CONFIG.apiKey && CLEANSHIELD_AI_CONFIG.apiKey.trim().length > 0);
+    }
+
+    getApiKey() {
+        // Prefer localStorage over config.js file
+        const storedKey = localStorage.getItem('cleanshield_api_key');
+        if (storedKey && storedKey.trim().length > 0) {
+            return storedKey.trim();
+        }
+        return CLEANSHIELD_AI_CONFIG.apiKey || '';
     }
 
     updateModeIndicator() {
@@ -109,6 +123,27 @@ Puedes escribirme lo que necesites o usar los botones rapidos de abajo.
     async handleSend() {
         const text = this.messageInput.value.trim();
         if (!text || this.isProcessing) return;
+
+        // Handle /apikey command
+        if (text.startsWith('/apikey ')) {
+            const key = text.substring(8).trim();
+            if (key.length > 0) {
+                localStorage.setItem('cleanshield_api_key', key);
+                this.isOnline = true;
+                this.updateModeIndicator();
+                this.messageInput.value = '';
+                this.messageInput.style.height = 'auto';
+                this.addMessage('assistant', '**API Key configurada correctamente.** El asistente ahora funciona con IA completa.\n\nLa clave se ha guardado de forma segura en tu navegador (localStorage) y no esta en ningun archivo.');
+                return;
+            }
+        }
+
+        if (text === '/apikey') {
+            this.messageInput.value = '';
+            this.messageInput.style.height = 'auto';
+            this.addMessage('assistant', '**Uso:** `/apikey TU_CLAVE_AQUI`\n\nObtener clave gratis: https://console.groq.com/keys\n\nLa clave se guarda en localStorage (no en archivos).');
+            return;
+        }
 
         // Clear input
         this.messageInput.value = '';
@@ -145,8 +180,9 @@ Puedes escribirme lo que necesites o usar los botones rapidos de abajo.
 
     async callAI(userMessage) {
         const config = CLEANSHIELD_AI_CONFIG;
+        const apiKey = this.getApiKey();
         
-        if (!config.apiKey || !config.apiKey.trim()) {
+        if (!apiKey) {
             return null;
         }
 
@@ -165,8 +201,9 @@ Puedes escribirme lo que necesites o usar los botones rapidos de abajo.
             });
         }
 
-        // Add current message
-        apiMessages.push({ role: 'user', content: userMessage });
+        // Add current message (truncate to prevent oversized requests)
+        const truncatedMessage = userMessage.length > 4000 ? userMessage.substring(0, 4000) + '...[mensaje truncado]' : userMessage;
+        apiMessages.push({ role: 'user', content: truncatedMessage });
 
         try {
             const controller = new AbortController();
@@ -176,7 +213,7 @@ Puedes escribirme lo que necesites o usar los botones rapidos de abajo.
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + config.apiKey
+                    'Authorization': 'Bearer ' + apiKey
                 },
                 body: JSON.stringify({
                     model: config.model,

@@ -6,10 +6,6 @@ leafly.com
 www.leafly.com
 weedmaps.com
 www.weedmaps.com
-erowid.org
-www.erowid.org
-bluelight.org
-www.bluelight.org
 drugs-forum.com
 www.drugs-forum.com
 shroomery.org
@@ -56,10 +52,6 @@ magicmushroomsshop.com
 www.magicmushroomsshop.com
 dmt-nexus.me
 www.dmt-nexus.me
-psychonautwiki.org
-www.psychonautwiki.org
-drugsdata.org
-www.drugsdata.org
 pillreports.net
 www.pillreports.net
 wedinos.org

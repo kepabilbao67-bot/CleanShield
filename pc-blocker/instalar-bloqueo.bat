@@ -1,5 +1,6 @@
 @echo off
 chcp 65001 >nul
+setlocal enabledelayedexpansion
 title CleanShield - Instalador de Proteccion
 color 0F
 
@@ -17,6 +18,10 @@ set "SCRIPTDIR=%~dp0"
 set "TOTAL_DOMINIOS=0"
 set "CATEGORIAS_PROCESADAS=0"
 set "ERRORES=0"
+set "RESPECT_CATEGORIES=0"
+
+:: --- Comprobar si se ejecuta en modo respetar categorias ---
+if "%~1"=="--respect-categories" set "RESPECT_CATEGORIES=1"
 
 :: --- Registrar inicio ---
 echo %date% %time% - [INSTALAR] Inicio de instalacion de proteccion >> "%LOGFILE%"
@@ -66,7 +71,7 @@ if %errorlevel% neq 0 (
 :: PASO 2: Limpiar entradas anteriores de CleanShield
 :: ============================================================
 echo   [2/7] Limpiando entradas anteriores de CleanShield...
-powershell -Command "$c = Get-Content '%HOSTS%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' }; Set-Content '%HOSTS%' $c" >nul 2>&1
+powershell -Command "$lines = Get-Content '%HOSTS%'; $inBlock = $false; $result = @(); foreach ($line in $lines) { if ($line -match '# =+ CleanShield') { $inBlock = $true; continue } if ($inBlock -and $line -match '# =+ FIN CleanShield') { $inBlock = $false; continue } if (-not $inBlock) { $result += $line } }; Set-Content '%HOSTS%' $result" >nul 2>&1
 if %errorlevel% neq 0 (
     echo          ADVERTENCIA: Error al limpiar entradas anteriores
     echo %date% %time% - [INSTALAR] ADVERTENCIA: Error limpiando hosts >> "%LOGFILE%"
@@ -126,19 +131,31 @@ for %%F in ("%SCRIPTDIR%dominios-*.txt") do (
     set /a CATEGORIAS_PROCESADAS+=1
     set "DOMINIOS_CATEGORIA=0"
     
-    :: Extraer nombre legible de la categoria
-    call :PROCESAR_CATEGORIA "%%F" "%%~nF"
+    :: Si estamos en modo respetar categorias, verificar si esta habilitada
+    set "SKIP_CAT=0"
+    if "!RESPECT_CATEGORIES!"=="1" (
+        for /f "tokens=3" %%v in ('reg query "HKLM\SOFTWARE\CleanShield\Categorias" /v "%%~nF" 2^>nul ^| findstr /i "%%~nF"') do (
+            if "%%v"=="0x0" set "SKIP_CAT=1"
+        )
+    )
+    
+    if "!SKIP_CAT!"=="0" (
+        :: Extraer nombre legible de la categoria
+        call :PROCESAR_CATEGORIA "%%F" "%%~nF"
+    ) else (
+        echo          [-] %%~nF (desactivada por configuracion)
+    )
 )
 
 echo.
-echo          Total de categorias procesadas: %CATEGORIAS_PROCESADAS%
-echo          Total de dominios bloqueados: %TOTAL_DOMINIOS%
-echo %date% %time% - [INSTALAR] %CATEGORIAS_PROCESADAS% categorias, %TOTAL_DOMINIOS% dominios bloqueados >> "%LOGFILE%"
+echo          Total de categorias procesadas: !CATEGORIAS_PROCESADAS!
+echo          Total de dominios bloqueados: !TOTAL_DOMINIOS!
+echo %date% %time% - [INSTALAR] !CATEGORIAS_PROCESADAS! categorias, !TOTAL_DOMINIOS! dominios bloqueados >> "%LOGFILE%"
 
 :: Agregar cierre al hosts
 echo. >> "%HOSTS%"
 echo # ================================================================= >> "%HOSTS%"
-echo # FIN CleanShield - Total dominios: %TOTAL_DOMINIOS% >> "%HOSTS%"
+echo # FIN CleanShield - Total dominios: !TOTAL_DOMINIOS! >> "%HOSTS%"
 echo # ================================================================= >> "%HOSTS%"
 
 :: ============================================================
@@ -237,9 +254,9 @@ echo   ║           INSTALACION COMPLETADA CON EXITO                   ║
 echo   ║                                                              ║
 echo   ╠══════════════════════════════════════════════════════════════╣
 echo   ║                                                              ║
-echo   ║   Categorias bloqueadas:  %CATEGORIAS_PROCESADAS%                                ║
-echo   ║   Dominios bloqueados:    %TOTAL_DOMINIOS%                              ║
-echo   ║   Errores encontrados:    %ERRORES%                                ║
+echo   ║   Categorias bloqueadas:  !CATEGORIAS_PROCESADAS!                                ║
+echo   ║   Dominios bloqueados:    !TOTAL_DOMINIOS!                              ║
+echo   ║   Errores encontrados:    !ERRORES!                                ║
 echo   ║                                                              ║
 echo   ║   SafeSearch:             FORZADO                            ║
 echo   ║   DNS-over-HTTPS:         BLOQUEADO                          ║
@@ -249,9 +266,9 @@ echo   ║                                                              ║
 echo   ╚══════════════════════════════════════════════════════════════╝
 echo.
 
-if %ERRORES% gtr 0 (
+if !ERRORES! gtr 0 (
     color 0E
-    echo   ADVERTENCIA: Se encontraron %ERRORES% errores durante la instalacion.
+    echo   ADVERTENCIA: Se encontraron !ERRORES! errores durante la instalacion.
     echo   Revisa el archivo de registro para mas detalles: %LOGFILE%
 ) else (
     color 0A
@@ -259,7 +276,7 @@ if %ERRORES% gtr 0 (
 )
 
 echo.
-echo %date% %time% - [INSTALAR] Instalacion finalizada. Dominios: %TOTAL_DOMINIOS%, Errores: %ERRORES% >> "%LOGFILE%"
+echo %date% %time% - [INSTALAR] Instalacion finalizada. Dominios: !TOTAL_DOMINIOS!, Errores: !ERRORES! >> "%LOGFILE%"
 goto :EOF
 
 :: ============================================================

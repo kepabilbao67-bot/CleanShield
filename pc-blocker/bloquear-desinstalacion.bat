@@ -231,7 +231,8 @@ echo   [5/7] Creando tarea de vigilancia del archivo hosts...
 schtasks /delete /tn "CleanShield_VigilarHosts" /f >nul 2>&1
 
 :: Crear tarea que verifica el hosts cada 30 minutos y lo reaplicar si fue modificado
-schtasks /create /tn "CleanShield_VigilarHosts" /tr "\"%~dp0instalar-bloqueo.bat\"" /sc minute /mo 30 /ru SYSTEM /rl HIGHEST /f >nul 2>&1
+:: Usa configurar-categorias.bat en modo silencioso para respetar categorias habilitadas
+schtasks /create /tn "CleanShield_VigilarHosts" /tr "cmd /c \"%~dp0instalar-bloqueo.bat\" --respect-categories" /sc minute /mo 30 /ru SYSTEM /rl HIGHEST /f >nul 2>&1
 if %errorlevel% neq 0 (
     echo          ERROR: No se pudo crear la tarea de vigilancia
     echo %date% %time% - [ANTITAMPER] ERROR: Fallo tarea vigilancia >> "%LOGFILE%"
@@ -248,7 +249,7 @@ echo   [6/7] Configurando contrasena de proteccion...
 
 set "CLAVE_REG=HKLM\SOFTWARE\CleanShield"
 set "PASS_EXISTENTE="
-for /f "tokens=2*" %%a in ('reg query "%CLAVE_REG%" /v Password 2^>nul ^| findstr /i "Password"') do (
+for /f "tokens=2*" %%a in ('reg query "%CLAVE_REG%" /v PasswordHash 2^>nul ^| findstr /i "PasswordHash"') do (
     set "PASS_EXISTENTE=%%b"
 )
 
@@ -262,14 +263,17 @@ if defined PASS_EXISTENTE (
     echo.
     set /p "NUEVA_PASS=   Nueva contrasena (minimo 6 caracteres): "
     if defined NUEVA_PASS (
-        reg add "%CLAVE_REG%" /v Password /t REG_SZ /d "!NUEVA_PASS!" /f >nul 2>&1
+        :: Almacenar hash SHA256 de la contrasena (no la contrasena en texto plano)
+        for /f "tokens=*" %%h in ('powershell -Command "[System.BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes('!NUEVA_PASS!'))).Replace('-','')"') do (
+            reg add "%CLAVE_REG%" /v PasswordHash /t REG_SZ /d "%%h" /f >nul 2>&1
+        )
         if %errorlevel% neq 0 (
             echo          ERROR: No se pudo guardar la contrasena
             echo %date% %time% - [ANTITAMPER] ERROR: Fallo guardar contrasena >> "%LOGFILE%"
             set /a ERRORES+=1
         ) else (
-            echo          Contrasena configurada correctamente.
-            echo %date% %time% - [ANTITAMPER] Contrasena configurada >> "%LOGFILE%"
+            echo          Contrasena configurada correctamente (almacenada como hash).
+            echo %date% %time% - [ANTITAMPER] Contrasena hash configurada >> "%LOGFILE%"
         )
     ) else (
         echo          No se establecio contrasena. Se usara frase de seguridad.

@@ -17,6 +17,8 @@ const CLEANSHIELD_AI_CONFIG = {
     
     // Tu API Key - OBTENER GRATIS en: https://console.groq.com/keys
     // Crear cuenta -> Keys -> Create API Key -> Copiar aqui
+    // NOTA: La clave se puede configurar tambien desde el chat escribiendo: /apikey TU_CLAVE
+    // y se guardara en localStorage del navegador (mas seguro que dejarla aqui)
     apiKey: "",
     
     // Modelo a usar (Groq gratuito)

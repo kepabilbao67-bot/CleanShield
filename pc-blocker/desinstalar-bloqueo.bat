@@ -53,18 +53,24 @@ echo.
 
 :: Verificar si hay contrasena establecida en el registro
 set "PASS_GUARDADA="
-for /f "tokens=2*" %%a in ('reg query "%CLAVE_REG%" /v Password 2^>nul ^| findstr /i "Password"') do (
+for /f "tokens=2*" %%a in ('reg query "%CLAVE_REG%" /v PasswordHash 2^>nul ^| findstr /i "PasswordHash"') do (
     set "PASS_GUARDADA=%%b"
 )
 
 if defined PASS_GUARDADA (
-    :: Contrasena configurada - solicitar contrasena
+    :: Contrasena configurada - solicitar contrasena y comparar hash
     echo   Se requiere la contrasena de administrador de CleanShield.
     echo.
     set /p "PASS_INPUT=   Introduce la contrasena: "
     
-    :: Comparar contrasena (usando hash simple almacenado)
-    if not "!PASS_INPUT!"=="!PASS_GUARDADA!" (
+    :: Calcular hash SHA256 de la contrasena introducida
+    set "INPUT_HASH="
+    for /f "tokens=*" %%h in ('powershell -Command "[System.BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes('!PASS_INPUT!'))).Replace('-','')"') do (
+        set "INPUT_HASH=%%h"
+    )
+    
+    :: Comparar hashes
+    if not "!INPUT_HASH!"=="!PASS_GUARDADA!" (
         color 0C
         echo.
         echo   ERROR: Contrasena incorrecta.
@@ -142,8 +148,8 @@ if exist "%HOSTS%.bak" (
         echo %date% %time% - [DESINSTALAR] Hosts restaurado desde backup >> "%LOGFILE%"
     )
 ) else (
-    :: Si no hay backup, limpiar entradas de CleanShield
-    powershell -Command "$c = Get-Content '%HOSTS%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' }; Set-Content '%HOSTS%' $c" >nul 2>&1
+    :: Si no hay backup, limpiar entradas de CleanShield (solo entre marcadores)
+    powershell -Command "$lines = Get-Content '%HOSTS%'; $inBlock = $false; $result = @(); foreach ($line in $lines) { if ($line -match '# =+ CleanShield') { $inBlock = $true; continue } if ($inBlock -and $line -match '# =+ FIN CleanShield') { $inBlock = $false; continue } if (-not $inBlock) { $result += $line } }; Set-Content '%HOSTS%' $result" >nul 2>&1
     if %errorlevel% neq 0 (
         echo          ERROR: No se pudo limpiar el archivo hosts
         echo %date% %time% - [DESINSTALAR] ERROR: Fallo limpiar hosts >> "%LOGFILE%"
@@ -251,8 +257,8 @@ for %%F in ("%SCRIPTDIR%dominios-*.txt") do (
     set "CAT_!NUM!=%%~nF"
 )
 
-:: Limpiar hosts completamente de entradas CleanShield
-powershell -Command "$c = Get-Content '%HOSTS%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' -and $_ -notmatch '^# ---' }; Set-Content '%HOSTS%' $c" >nul 2>&1
+:: Limpiar hosts completamente de entradas CleanShield (only between markers)
+powershell -Command "$lines = Get-Content '%HOSTS%'; $inBlock = $false; $result = @(); foreach ($line in $lines) { if ($line -match '# =+ CleanShield') { $inBlock = $true; continue } if ($inBlock -and ($line -match '# =+ FIN CleanShield' -or $line -match '# FIN CleanShield')) { $inBlock = $false; continue } if (-not $inBlock) { $result += $line } }; Set-Content '%HOSTS%' $result" >nul 2>&1
 
 :: Reagregar solo las categorias NO seleccionadas
 echo. >> "%HOSTS%"

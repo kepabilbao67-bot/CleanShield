@@ -57,10 +57,10 @@ for %%F in ("%SCRIPTDIR%dominios-*.txt") do (
     set "CAT_!NUM!=%%~nF"
     set "FILE_!NUM!=%%F"
     
-    :: Verificar estado en registro (1=habilitado, 0=deshabilitado)
+    :: Verificar estado en registro (0x1=habilitado, 0x0=deshabilitado)
     set "ESTADO_!NUM!=1"
-    for /f "tokens=2*" %%a in ('reg query "%CLAVE_REG%" /v "%%~nF" 2^>nul ^| findstr /i "%%~nF"') do (
-        if "%%b"=="0" set "ESTADO_!NUM!=0"
+    for /f "tokens=3" %%a in ('reg query "%CLAVE_REG%" /v "%%~nF" 2^>nul ^| findstr /i "%%~nF"') do (
+        if "%%a"=="0x0" set "ESTADO_!NUM!=0"
     )
     
     :: Mostrar estado
@@ -164,8 +164,8 @@ echo %date% %time% - [CATEGORIAS] Configuracion guardada en registro >> "%LOGFIL
 :: Reaplicar archivo hosts solo con categorias habilitadas
 echo   Reaplicando archivo hosts...
 
-:: Limpiar entradas CleanShield del hosts
-powershell -Command "$c = Get-Content '%HOSTS%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' -and $_ -notmatch '^# ---' -and $_ -notmatch '^# ===' }; Set-Content '%HOSTS%' $c" >nul 2>&1
+:: Limpiar entradas CleanShield del hosts (solo entre marcadores)
+powershell -Command "$lines = Get-Content '%HOSTS%'; $inBlock = $false; $result = @(); foreach ($line in $lines) { if ($line -match '# =+ CleanShield') { $inBlock = $true; continue } if ($inBlock -and ($line -match '# =+ FIN CleanShield' -or $line -match '# FIN CleanShield')) { $inBlock = $false; continue } if (-not $inBlock) { $result += $line } }; Set-Content '%HOSTS%' $result" >nul 2>&1
 if %errorlevel% neq 0 (
     echo   ERROR: No se pudo limpiar el archivo hosts
     echo %date% %time% - [CATEGORIAS] ERROR: Fallo limpiar hosts >> "%LOGFILE%"
