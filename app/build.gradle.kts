@@ -13,7 +13,7 @@ android {
         applicationId = "com.cleanshield.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
+        versionCode = 5
         versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -37,7 +37,7 @@ android {
         }
         debug {
             isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = ".tutor"
             manifestPlaceholders["appLabel"] = "CleanShield 2.1"
         }
     }
