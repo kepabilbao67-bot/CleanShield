@@ -222,7 +222,7 @@ fun GuardianScreen(onNavigateBack: () -> Unit) {
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "adb shell pm grant com.cleanshield.app.debug android.permission.WRITE_SECURE_SETTINGS",
+                    "adb shell pm grant com.cleanshield.app.tutor android.permission.WRITE_SECURE_SETTINGS",
                     style = MaterialTheme.typography.bodySmall,
                     fontFamily = FontFamily.Monospace,
                     color = CleanShieldColors.GreenPrimary

@@ -76,6 +76,7 @@ class CleanShieldAccessibilityService : AccessibilityService() {
         // Skip our own app and system UI
         if (packageName == "com.cleanshield.app" ||
             packageName == "com.cleanshield.app.debug" ||
+            packageName == "com.cleanshield.app.tutor" ||
             packageName == "com.android.systemui" ||
             packageName == "com.android.launcher" ||
             packageName.startsWith("com.android.launcher")) {
