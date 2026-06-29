@@ -201,6 +201,26 @@ object Constants {
     }
 
     // ═══════════════════════════════════════════════════════════════
+    // DNS DE FILTRO FAMILIAR (bloqueo a nivel de sistema)
+    // ═══════════════════════════════════════════════════════════════
+    object Dns {
+        // DNS con filtro familiar (bloquea porno en todo el movil, cifrado).
+        const val DEFAULT_HOST = "family.adguard-dns.com"
+        // Alternativa: "family.cleanbrowsing.org" / "family.cloudflare-dns.com"
+
+        // Claves del sistema Android (Settings.Global) para el "DNS privado".
+        const val SETTING_MODE = "private_dns_mode"
+        const val SETTING_SPECIFIER = "private_dns_specifier"
+        const val MODE_HOSTNAME = "hostname"
+        const val MODE_OFF = "off"
+
+        // Intervalo de vigilancia del DNS (ms)
+        const val ENFORCE_INTERVAL_MS = 3000L
+        // Tiempo minimo entre avisos al tutor (ms)
+        const val ALERT_THROTTLE_MS = 5 * 60 * 1000L
+    }
+
+    // ═══════════════════════════════════════════════════════════════
     // PREFERENCES KEYS
     // ═══════════════════════════════════════════════════════════════
     object Prefs {
@@ -215,6 +235,11 @@ object Constants {
         const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
         const val KEY_EMERGENCY_CONTACT = "emergency_contact"
         const val KEY_LAST_RELAPSE = "last_relapse_date"
+        // Modo tutor / proteccion anti-manipulacion
+        const val KEY_GUARDIAN_PHONE = "guardian_phone"
+        const val KEY_DNS_LOCK_ENABLED = "dns_lock_enabled"
+        const val KEY_DNS_HOST = "dns_host"
+        const val KEY_LAST_TAMPER_ALERT = "last_tamper_alert"
     }
 
     // ═══════════════════════════════════════════════════════════════

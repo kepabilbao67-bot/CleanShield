@@ -102,7 +102,12 @@ fun CleanShieldApp() {
                 ProtectionScreen()
             }
             composable(NavRoutes.SETTINGS) {
-                SettingsScreen()
+                SettingsScreen(navController)
+            }
+            composable(NavRoutes.GUARDIAN) {
+                com.cleanshield.app.ui.guardian.GuardianScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
             composable(NavRoutes.VOICE_ASSISTANT) {
                 VoiceAssistantScreen(onNavigateBack = { navController.popBackStack() })
@@ -743,7 +748,7 @@ fun StatRow(label: String, value: String) {
 }
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -768,6 +773,9 @@ fun SettingsScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         SettingsSection("Protección") {
+            SettingsItem(Icons.Default.Shield, "Modo Tutor (anti-impulso)") {
+                navController.navigate(NavRoutes.GUARDIAN)
+            }
             SettingsItem(Icons.Default.VpnKey, "Configurar VPN")
             SettingsItem(Icons.Default.Block, "Apps bloqueadas")
             SettingsItem(Icons.Default.NightsStay, "Modo nocturno estricto")
@@ -815,11 +823,11 @@ fun SettingsSection(title: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun SettingsItem(icon: ImageVector, title: String) {
+fun SettingsItem(icon: ImageVector, title: String, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { }
+            .clickable { onClick() }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

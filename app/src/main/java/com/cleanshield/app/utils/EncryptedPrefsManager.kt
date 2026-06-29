@@ -119,6 +119,27 @@ class EncryptedPrefsManager @Inject constructor(
         set(value) = prefs.edit().putString(Constants.Prefs.KEY_EMERGENCY_CONTACT, value).apply()
 
     // ═══════════════════════════════════════════════════════════════
+    // MODO TUTOR / PROTECCION ANTI-MANIPULACION
+    // ═══════════════════════════════════════════════════════════════
+
+    var guardianPhone: String?
+        get() = prefs.getString(Constants.Prefs.KEY_GUARDIAN_PHONE, null)
+        set(value) = prefs.edit().putString(Constants.Prefs.KEY_GUARDIAN_PHONE, value).apply()
+
+    var isDnsLockEnabled: Boolean
+        get() = prefs.getBoolean(Constants.Prefs.KEY_DNS_LOCK_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(Constants.Prefs.KEY_DNS_LOCK_ENABLED, value).apply()
+
+    var dnsHost: String
+        get() = prefs.getString(Constants.Prefs.KEY_DNS_HOST, Constants.Dns.DEFAULT_HOST)
+            ?: Constants.Dns.DEFAULT_HOST
+        set(value) = prefs.edit().putString(Constants.Prefs.KEY_DNS_HOST, value).apply()
+
+    var lastTamperAlert: Long
+        get() = prefs.getLong(Constants.Prefs.KEY_LAST_TAMPER_ALERT, 0L)
+        set(value) = prefs.edit().putLong(Constants.Prefs.KEY_LAST_TAMPER_ALERT, value).apply()
+
+    // ═══════════════════════════════════════════════════════════════
     // RELAPSE TRACKING
     // ═══════════════════════════════════════════════════════════════
 

@@ -4,10 +4,15 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import com.cleanshield.app.ui.blocked.BlockedActivity
 import com.cleanshield.app.utils.Constants
+import com.cleanshield.app.utils.EncryptedPrefsManager
+import com.cleanshield.app.utils.TamperGuard
 
 class CleanShieldAccessibilityService : AccessibilityService() {
 
@@ -18,6 +23,19 @@ class CleanShieldAccessibilityService : AccessibilityService() {
     private var lastBlockedPackage: String? = null
     private var lastBlockTime: Long = 0L
     private val blockCooldownMs = 1000L // Prevent rapid re-triggering
+
+    // Vigilancia periodica del DNS (anti-manipulacion)
+    private val handler = Handler(Looper.getMainLooper())
+    private val enforceRunnable = object : Runnable {
+        override fun run() {
+            try {
+                TamperGuard.enforce(applicationContext)
+            } catch (e: Exception) {
+                Log.w(TAG, "Error en vigilancia de DNS", e)
+            }
+            handler.postDelayed(this, Constants.Dns.ENFORCE_INTERVAL_MS)
+        }
+    }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -33,6 +51,9 @@ class CleanShieldAccessibilityService : AccessibilityService() {
         }
 
         serviceInfo = info
+        // Arranca la vigilancia periodica del DNS
+        handler.removeCallbacks(enforceRunnable)
+        handler.post(enforceRunnable)
         Log.d(TAG, "Accessibility Service connected - monitoring ${blockedPackages.size} packages")
     }
 
@@ -54,15 +75,60 @@ class CleanShieldAccessibilityService : AccessibilityService() {
 
         // Skip our own app and system UI
         if (packageName == "com.cleanshield.app" ||
+            packageName == "com.cleanshield.app.debug" ||
             packageName == "com.android.systemui" ||
             packageName == "com.android.launcher" ||
             packageName.startsWith("com.android.launcher")) {
             return
         }
 
+        // Anti-manipulacion: proteger la pantalla de "DNS privado" de Ajustes
+        if (packageName == "com.android.settings" || packageName.contains("settings")) {
+            guardDnsSettingsScreen()
+            return
+        }
+
         if (isBlockedPackage(packageName)) {
             blockApp(packageName)
         }
+    }
+
+    /**
+     * Si el candado de DNS esta activo y el usuario abre la pantalla de
+     * "DNS privado", lo sacamos de ahi, reaplicamos el DNS y avisamos al tutor.
+     */
+    private fun guardDnsSettingsScreen() {
+        val prefs = EncryptedPrefsManager(applicationContext)
+        if (!prefs.isDnsLockEnabled) return
+
+        val root = rootInActiveWindow ?: return
+        val isDnsScreen = nodeContainsAnyText(root, DNS_SCREEN_KEYWORDS, 0)
+        if (!isDnsScreen) return
+
+        Log.d(TAG, "Pantalla de DNS privado detectada con candado activo -> bloqueando")
+        performGlobalAction(GLOBAL_ACTION_BACK)
+        TamperGuard.enforce(applicationContext)
+        TamperGuard.alertGuardian(
+            applicationContext,
+            prefs,
+            "CleanShield: se intentó abrir los ajustes de DNS privado en el móvil."
+        )
+    }
+
+    /** Busca (recursivamente, con límite de profundidad) si algún nodo contiene alguno de los textos. */
+    private fun nodeContainsAnyText(
+        node: AccessibilityNodeInfo?,
+        keywords: List<String>,
+        depth: Int
+    ): Boolean {
+        if (node == null || depth > 12) return false
+        val text = (node.text?.toString() ?: "") + " " + (node.contentDescription?.toString() ?: "")
+        val lower = text.lowercase()
+        if (keywords.any { lower.contains(it) }) return true
+        for (i in 0 until node.childCount) {
+            if (nodeContainsAnyText(node.getChild(i), keywords, depth + 1)) return true
+        }
+        return false
     }
 
     private fun handleContentChange(event: AccessibilityEvent) {
@@ -141,10 +207,21 @@ class CleanShieldAccessibilityService : AccessibilityService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(enforceRunnable)
         Log.d(TAG, "Accessibility Service destroyed")
     }
 
     companion object {
         private const val TAG = "CSAccessibility"
+
+        // Textos que identifican la pantalla de "DNS privado" en Ajustes (varios idiomas/marcas)
+        private val DNS_SCREEN_KEYWORDS = listOf(
+            "dns privado",
+            "private dns",
+            "proveedor de dns",
+            "private dns provider",
+            "nombre de host del proveedor",
+            "dns-over-tls"
+        )
     }
 }

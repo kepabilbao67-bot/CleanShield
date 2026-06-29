@@ -14,4 +14,5 @@ object NavRoutes {
     const val BRAIN_RECOVERY = "brain_recovery"
     const val SETTINGS = "settings"
     const val PROTECTION = "protection"
+    const val GUARDIAN = "guardian"
 }
