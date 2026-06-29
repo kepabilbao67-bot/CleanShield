@@ -1,8 +1,13 @@
 package com.cleanshield.app.ui
 
+import android.app.Activity
+import android.net.VpnService
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,6 +52,7 @@ import com.cleanshield.app.ui.theme.CleanShieldTheme
 import com.cleanshield.app.ui.timesafe.TimeSafeScreen
 import com.cleanshield.app.ui.voice.VoiceAssistantScreen
 import com.cleanshield.app.utils.Constants
+import com.cleanshield.app.vpn.VpnController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -491,6 +498,43 @@ fun FeatureCard(
 
 @Composable
 fun ProtectionScreen() {
+    val context = LocalContext.current
+    var protectionActive by remember { mutableStateOf(VpnController.isEnabled(context)) }
+
+    // Lanzador para el dialogo del sistema que concede el permiso de VPN.
+    val vpnPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            VpnController.startProtection(context)
+            protectionActive = true
+        }
+    }
+
+    // Permiso de notificaciones (Android 13+). La VPN funciona igual sin el.
+    val notifPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
+
+    fun activateProtection() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notifPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
+        // VpnService.prepare devuelve un Intent si aun no se ha concedido el permiso.
+        val prepareIntent = VpnService.prepare(context)
+        if (prepareIntent != null) {
+            vpnPermissionLauncher.launch(prepareIntent)
+        } else {
+            VpnController.startProtection(context)
+            protectionActive = true
+        }
+    }
+
+    fun deactivateProtection() {
+        VpnController.stopProtection(context)
+        protectionActive = false
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -498,17 +542,76 @@ fun ProtectionScreen() {
             .padding(16.dp)
     ) {
         Text(
-            "Protección Activa",
+            if (protectionActive) "Protección Activa" else "Protección Desactivada",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = CleanShieldColors.GreenPrimary
+            color = if (protectionActive) CleanShieldColors.GreenPrimary else CleanShieldColors.AccentRed
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            "Todos los sistemas funcionando",
+            if (protectionActive) "Todos los sistemas funcionando"
+            else "Pulsa el botón para activar el filtro y bloquear las webs",
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White.copy(alpha = 0.6f)
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Boton principal de activacion/desactivacion
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = if (protectionActive)
+                    CleanShieldColors.GreenPrimary.copy(alpha = 0.12f)
+                else
+                    CleanShieldColors.AccentRed.copy(alpha = 0.12f)
+            ),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    if (protectionActive) Icons.Default.Shield else Icons.Default.GppBad,
+                    contentDescription = null,
+                    tint = if (protectionActive) CleanShieldColors.GreenPrimary else CleanShieldColors.AccentRed,
+                    modifier = Modifier.size(48.dp)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    if (protectionActive) "Estás protegido" else "Sin protección",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = {
+                        if (protectionActive) deactivateProtection() else activateProtection()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (protectionActive)
+                            CleanShieldColors.AccentRed
+                        else
+                            CleanShieldColors.GreenPrimary
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(14.dp)
+                ) {
+                    Text(
+                        if (protectionActive) "Desactivar protección" else "Activar protección",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -516,42 +619,42 @@ fun ProtectionScreen() {
             icon = Icons.Default.VpnKey,
             title = "VPN DNS Filter",
             description = "Bloqueando ${Constants.BLOCKED_DOMAINS.size} dominios peligrosos",
-            isActive = true
+            isActive = protectionActive
         )
         Spacer(modifier = Modifier.height(8.dp))
         ProtectionCard(
             icon = Icons.Default.Block,
             title = "App Blocker",
             description = "${Constants.ALL_BLOCKED_PACKAGES.size} apps bloqueadas",
-            isActive = true
+            isActive = protectionActive
         )
         Spacer(modifier = Modifier.height(8.dp))
         ProtectionCard(
             icon = Icons.Default.Accessibility,
             title = "Accessibility Service",
             description = "Detectando contenido por palabras clave",
-            isActive = true
+            isActive = protectionActive
         )
         Spacer(modifier = Modifier.height(8.dp))
         ProtectionCard(
             icon = Icons.Default.AdminPanelSettings,
             title = "Device Admin",
             description = "Protección contra desinstalación activa",
-            isActive = true
+            isActive = protectionActive
         )
         Spacer(modifier = Modifier.height(8.dp))
         ProtectionCard(
             icon = Icons.Default.GpsFixed,
             title = "Zonas de Peligro GPS",
             description = "Monitoreo de ubicación activo",
-            isActive = true
+            isActive = protectionActive
         )
         Spacer(modifier = Modifier.height(8.dp))
         ProtectionCard(
             icon = Icons.Default.FilterAlt,
             title = "Keyword Filter",
             description = "${Constants.ALL_BLOCKED_KEYWORDS.size} palabras clave bloqueadas",
-            isActive = true
+            isActive = protectionActive
         )
 
         Spacer(modifier = Modifier.height(20.dp))

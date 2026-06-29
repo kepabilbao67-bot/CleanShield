@@ -56,6 +56,7 @@ class CleanShieldVpnService : VpnService() {
                 dnsProxyEngine = DnsProxyEngine(pfd, dnsFilter, this)
                 dnsProxyEngine?.start()
                 isRunning = true
+                VpnController.setEnabled(this, true)
                 Log.d(TAG, "VPN started successfully")
             } ?: run {
                 Log.e(TAG, "Failed to establish VPN interface")
@@ -69,6 +70,7 @@ class CleanShieldVpnService : VpnService() {
 
     private fun stopVpn() {
         isRunning = false
+        VpnController.setEnabled(this, false)
         dnsProxyEngine?.stop()
         dnsProxyEngine = null
         vpnInterface?.close()

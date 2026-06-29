@@ -189,6 +189,11 @@ reg delete "HKLM\SOFTWARE\Policies\Mozilla\Firefox\DNSOverHTTPS" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\Opera\URLBlocklist" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Policies\Opera" /v DeveloperToolsAvailability /f >nul 2>&1
 
+:: Eliminar bloqueo de extensiones (ExtensionInstallBlocklist)
+reg delete "HKLM\SOFTWARE\Policies\Google\Chrome\ExtensionInstallBlocklist" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallBlocklist" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Policies\BraveSoftware\Brave\ExtensionInstallBlocklist" /f >nul 2>&1
+
 echo          Politicas de navegador eliminadas.
 echo %date% %time% - [DESINSTALAR] Politicas de navegador eliminadas >> "%LOGFILE%"
 
@@ -205,6 +210,11 @@ if %errorlevel% neq 0 (
 
 :: Eliminar tarea de vigilancia si existe
 schtasks /delete /tn "CleanShield_VigilarHosts" /f >nul 2>&1
+schtasks /delete /tn "CleanShield_AlIniciar" /f >nul 2>&1
+
+:: Eliminar clave anti-tamper y exclusion de Defender
+reg delete "HKLM\SOFTWARE\CleanShield" /f >nul 2>&1
+powershell -Command "Remove-MpPreference -ExclusionPath '%HOSTS%' -ErrorAction SilentlyContinue" >nul 2>&1
 
 :: Paso 4: Limpiar DNS
 echo   [4/4] Limpiando cache DNS...
