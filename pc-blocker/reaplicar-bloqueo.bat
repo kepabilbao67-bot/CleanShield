@@ -12,6 +12,10 @@ set "LOGFILE=%~dp0CleanShield-log.txt"
 
 echo %date% %time% - [VIGILANCIA] Reaplicacion ejecutada >> "%LOGFILE%"
 
+REM --- Asegurar permisos de escritura del hosts ---
+attrib -r -s -h "%H%" >nul 2>&1
+icacls "%H%" /grant *S-1-5-32-544:F >nul 2>&1
+
 REM --- Reconstruir el bloque del hosts ---
 powershell -Command "$c = Get-Content '%H%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' }; Set-Content '%H%' $c" >nul 2>&1
 

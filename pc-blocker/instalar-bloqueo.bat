@@ -20,8 +20,17 @@ set "LOGFILE=%~dp0CleanShield-log.txt"
 set "REAPLICAR=%~dp0reaplicar-bloqueo.bat"
 echo %date% %time% - [INSTALAR] Instalacion iniciada >> "%LOGFILE%"
 
-echo   [1/9] Creando backup del archivo hosts...
+echo   [1/9] Creando backup y preparando permisos del hosts...
 if not exist "%H%.bak" copy "%H%" "%H%.bak" >nul 2>&1
+REM --- Quitar solo lectura y asegurar permisos de escritura ---
+REM (la causa mas tipica de "Acceso denegado" al escribir en el hosts)
+attrib -r -s -h "%H%" >nul 2>&1
+takeown /f "%H%" >nul 2>&1
+icacls "%H%" /grant *S-1-5-32-544:F >nul 2>&1
+icacls "%H%" /grant "%USERNAME%":F >nul 2>&1
+REM Permitir a cmd escribir aunque "Acceso controlado a carpetas" este activo
+powershell -Command "Add-MpPreference -ControlledFolderAccessAllowedApplications '%SystemRoot%\System32\cmd.exe' -ErrorAction SilentlyContinue" >nul 2>&1
+powershell -Command "Add-MpPreference -ControlledFolderAccessAllowedApplications '%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe' -ErrorAction SilentlyContinue" >nul 2>&1
 
 echo   [2/9] Limpiando entradas anteriores...
 powershell -Command "$c = Get-Content '%H%' | Where-Object { $_ -notmatch 'CleanShield' -and $_ -notmatch '^0\.0\.0\.0' -and $_ -notmatch '^216\.239\.38\.120' }; Set-Content '%H%' $c" >nul 2>&1
@@ -63,6 +72,31 @@ for %%C in (drogas alcohol autolesion darkweb pirateria dating violencia) do (
 )
 
 echo # ===== FIN CleanShield ===== >> "%H%"
+
+REM --- Comprobar que realmente se escribio en el hosts ---
+findstr /c:"CleanShield BLOQUEO" "%H%" >nul 2>&1
+if errorlevel 1 (
+    color 0C
+    echo.
+    echo   ====================================================
+    echo   =   ERROR: NO SE PUDO ESCRIBIR EN EL HOSTS         =
+    echo   ====================================================
+    echo.
+    echo   Windows ha bloqueado la escritura ("Acceso denegado").
+    echo   Causa mas probable: "Acceso controlado a carpetas"
+    echo   (proteccion anti-ransomware de Windows Security^).
+    echo.
+    echo   SOLUCION:
+    echo   1. Abre "Seguridad de Windows".
+    echo   2. Ve a "Proteccion antivirus y contra amenazas".
+    echo   3. Entra en "Administrar la proteccion contra ransomware".
+    echo   4. DESACTIVA "Acceso controlado a carpetas".
+    echo   5. Vuelve a ejecutar este instalador como administrador.
+    echo.
+    echo %date% %time% - [INSTALAR] ERROR: hosts no escribible (Acceso denegado) >> "%LOGFILE%"
+    pause
+    exit /b 1
+)
 
 echo   [4/9] Forzando SafeSearch por politica...
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v ForceGoogleSafeSearch /t REG_DWORD /d 1 /f >nul 2>&1
