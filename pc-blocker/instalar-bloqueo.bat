@@ -47,18 +47,18 @@ echo 0.0.0.0 yandex.ru >> "%H%"
 echo 0.0.0.0 search.brave.com >> "%H%"
 
 echo # --- PORNOGRAFIA --- >> "%H%"
-for /f "tokens=*" %%a in (%~dp0dominios-bloqueados.txt) do echo 0.0.0.0 %%a >> "%H%"
+for /f "usebackq tokens=*" %%a in ("%~dp0dominios-bloqueados.txt") do echo 0.0.0.0 %%a >> "%H%"
 
 echo # --- PROSTITUCION --- >> "%H%"
-for /f "tokens=*" %%a in (%~dp0dominios-prostitucion.txt) do echo 0.0.0.0 %%a >> "%H%"
+for /f "usebackq tokens=*" %%a in ("%~dp0dominios-prostitucion.txt") do echo 0.0.0.0 %%a >> "%H%"
 
 echo # --- APUESTAS Y PRESTAMOS --- >> "%H%"
-for /f "tokens=*" %%a in (%~dp0dominios-apuestas-prestamos.txt) do echo 0.0.0.0 %%a >> "%H%"
+for /f "usebackq tokens=*" %%a in ("%~dp0dominios-apuestas-prestamos.txt") do echo 0.0.0.0 %%a >> "%H%"
 
 for %%C in (drogas alcohol autolesion darkweb pirateria dating violencia) do (
     if exist "%~dp0dominios-%%C.txt" (
         echo # --- %%C --- >> "%H%"
-        for /f "tokens=*" %%a in (%~dp0dominios-%%C.txt) do echo 0.0.0.0 %%a >> "%H%"
+        for /f "usebackq tokens=*" %%a in ("%~dp0dominios-%%C.txt") do echo 0.0.0.0 %%a >> "%H%"
     )
 )
 
@@ -146,7 +146,7 @@ exit /b 0
 :: ============================================================
 :BUILD_BLOCKLIST
 if not exist "%~dp0%1" exit /b 0
-for /f "tokens=*" %%d in (%~dp0%1) do (
+for /f "usebackq tokens=*" %%d in ("%~dp0%1") do (
     set /a N+=1
     reg add "HKLM\SOFTWARE\Policies\Google\Chrome\URLBlocklist" /v !N! /t REG_SZ /d "%%d" /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge\URLBlocklist" /v !N! /t REG_SZ /d "%%d" /f >nul 2>&1

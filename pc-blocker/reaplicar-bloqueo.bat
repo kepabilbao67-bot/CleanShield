@@ -30,20 +30,20 @@ echo 0.0.0.0 search.brave.com >> "%H%"
 
 if exist "%~dp0dominios-bloqueados.txt" (
     echo # --- PORNOGRAFIA --- >> "%H%"
-    for /f "tokens=*" %%a in (%~dp0dominios-bloqueados.txt) do echo 0.0.0.0 %%a >> "%H%"
+    for /f "usebackq tokens=*" %%a in ("%~dp0dominios-bloqueados.txt") do echo 0.0.0.0 %%a >> "%H%"
 )
 if exist "%~dp0dominios-prostitucion.txt" (
     echo # --- PROSTITUCION --- >> "%H%"
-    for /f "tokens=*" %%a in (%~dp0dominios-prostitucion.txt) do echo 0.0.0.0 %%a >> "%H%"
+    for /f "usebackq tokens=*" %%a in ("%~dp0dominios-prostitucion.txt") do echo 0.0.0.0 %%a >> "%H%"
 )
 if exist "%~dp0dominios-apuestas-prestamos.txt" (
     echo # --- APUESTAS Y PRESTAMOS --- >> "%H%"
-    for /f "tokens=*" %%a in (%~dp0dominios-apuestas-prestamos.txt) do echo 0.0.0.0 %%a >> "%H%"
+    for /f "usebackq tokens=*" %%a in ("%~dp0dominios-apuestas-prestamos.txt") do echo 0.0.0.0 %%a >> "%H%"
 )
 for %%C in (drogas alcohol autolesion darkweb pirateria dating violencia) do (
     if exist "%~dp0dominios-%%C.txt" (
         echo # --- %%C --- >> "%H%"
-        for /f "tokens=*" %%a in (%~dp0dominios-%%C.txt) do echo 0.0.0.0 %%a >> "%H%"
+        for /f "usebackq tokens=*" %%a in ("%~dp0dominios-%%C.txt") do echo 0.0.0.0 %%a >> "%H%"
     )
 )
 echo # ===== FIN CleanShield ===== >> "%H%"
