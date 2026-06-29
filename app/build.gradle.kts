@@ -13,13 +13,14 @@ android {
         applicationId = "com.cleanshield.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
+        versionCode = 4
         versionName = "2.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["appLabel"] = "CleanShield"
 
         // Groq API Key - replace with your own
         buildConfigField("String", "GROQ_API_KEY", "\"gsk_your_api_key_here\"")
@@ -37,6 +38,7 @@ android {
         debug {
             isMinifyEnabled = false
             applicationIdSuffix = ".debug"
+            manifestPlaceholders["appLabel"] = "CleanShield 2.1"
         }
     }
 
